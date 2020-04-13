@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>类型编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        .layui-btn:hover {
+            opacity: .8;
+            filter: alpha(opacity=80);
+            color: #fff;
+        }
+
+        .btn-add-radius {
+            border-radius: 100px;
+        }
+        .btn-add {
+            background-color: rgba(4, 156, 196, 1);
+        }
+        .user_face{
+            margin-top: 10px;
+            height: 80px;
+            width: 80px;
+            display: none;
+        }
+        .user_face img{
+            width: 100%;
+            height: 100%;
+        }
+        .layui-form-radio > i:hover, .layui-form-radioed > i {
+            color:rgba(4, 156, 196, 1);
+        }
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">
+           <span class="layui-breadcrumb" lay-separator="/" style="visibility: visible;">
+              <a href="{:url('index/index')}">控制台</a>
+              <a><cite>商品管理</cite></a>
+              <a href="{:url('cates/index')}">管理员列表</a>
+              <a><cite>类型编辑</cite></a>
+            </span>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-form">
+                <input type="hidden" name="id" value="{$field.id}">
+                <div class="layui-form-item">
+                    <label for="cate_name" class="layui-form-label">类型名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" value="{$field.cate_name}" name="cate_name" id="cate_name" lay-verify="cate_name" placeholder="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn btn-add btn-add-radius" lay-submit lay-filter="edit">保存</button>
+                        <button class="layui-btn btn-add btn-add-radius" onclick="window.location.href='{:url("cates/index")}'" style="background-color:#ffffff;color: #333;border: 1px solid #ccc;">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['element','upload','form'], function() {
+        var element = layui.element,
+            $ = layui.jquery,
+            upload = layui.upload,
+            form = layui.form;
+
+        /**
+         * 表单提交组件
+         */
+        form.on('submit(edit)',function (data) {
+            $.post("{:url('cates/edit')}",data.field,function (res) {
+                if (res.code === 0){
+                    layer.msg(res.msg);
+                    window.location.href = "{:url('cates/index')}";
+                }else{
+                    layer.msg(res.msg)
+                }
+            },'json');
+        });
+    });
+</script>
+</body>
+</html>

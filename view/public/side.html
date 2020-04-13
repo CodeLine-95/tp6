@@ -1,0 +1,27 @@
+<div class="layui-side">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-nav-tree yk_tree"  lay-shrink="all" lay-filter="test">
+<!--            <li class="layui-nav-item">-->
+<!--                <a href="javascript:;">系统管理</a>-->
+<!--                <dl class="layui-nav-child">-->
+<!--                    <dd><a href="{:url('config/index')}" target='right_content'>配置项</a></dd>-->
+<!--                </dl>-->
+<!--            </li>-->
+            <li class="layui-nav-item">
+                <a href="javascript:;">用户管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('admin/index')}" target='right_content'>管理员</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">商品管理</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="{:url('cates/index')}" target='right_content'>类型管理</a></dd>
+                    <dd><a href="{:url('goods/index')}" target='right_content'>商品管理</a></dd>
+                    <dd><a href="{:url('warehousing/index')}" target='right_content'>入库管理</a></dd>
+                    <dd><a href="{:url('warehousing/outputIndex')}" target='right_content'>出库管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>

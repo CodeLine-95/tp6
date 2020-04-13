@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>出库列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        .layui-btn:hover {
+            opacity: .8;
+            filter: alpha(opacity=80);
+            color: #fff;
+        }
+
+        .btn-add-radius {
+            border-radius: 100px;
+        }
+        .btn-add {
+            background-color: rgba(4, 156, 196, 1);
+        }
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">
+           <span class="layui-breadcrumb" lay-separator="/" style="visibility: visible;">
+              <a href="{:url('index/index')}">控制台</a>
+              <a><cite>商品管理</cite></a>
+              <a><cite>出库列表</cite></a>
+            </span>
+        </div>
+        <div class="layui-card-body">
+            <table id="table" lay-filter="table_list"></table>
+            <script type="text/html" id="toolbarDemo">
+                {if condition="$cate_bool > 0"}
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm btn-add btn-add-radius" lay-event="add">添加</button>
+                </div>
+                {else}
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm btn-add btn-add-radius" lay-event="goods_add">添加商品</button>
+                </div>
+                {/if}
+            </script>
+            <script type="text/html" id="rightToolbar">
+                <a class="layui-btn layui-btn-xs btn-add" lay-event="show">查看</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['element','table'], function(){
+        var element = layui.element,$ = layui.jquery,table = layui.table;
+        table.render({
+            elem: '#table'
+            ,height: "auto"
+            ,toolbar: '#toolbarDemo'
+            ,defaultToolbar : false
+            ,url: "{:url('warehousing/warehousingList',['state'=>2])}"
+            ,cols: [[ //表头
+                ,{field: 'orderid', title: '出库单号', width:200}
+                ,{field: 'goods_name', title: '商品名称', width:''}
+                ,{field: 'user_name', title: '操作人', width:''}
+                ,{field: 'num', title: '出库数量', width:100}
+                ,{field: 'user_tel', title: '联系电话', width: ''}
+                ,{field: 'user_email', title: '联系邮箱', width: ''}
+                ,{field: 'create_time', title: '出库时间', width: 180}
+                ,{field: 'update_time', title: '更新时间', width: 180}
+                ,{fixed:'right', title: '操作', width: 150, unresize: true, toolbar: "#rightToolbar"},
+            ]]
+            , page: {theme: '#2aace4',prev: '上一页',next: '下一页'}
+            , request: {
+                limitName : 'pageSize'
+            }
+            , skin: 'line'
+            , text: {
+                none: "数据为空!"
+            }
+        });
+
+        //箭筒头部工具栏
+        table.on('toolbar(table_list)',function (obj) {
+            var layEvent = obj.event;
+            if(layEvent === 'add'){
+                window.location.href = "{:url('warehousing/add',['state'=>2])}";
+            }else if(layEvent === 'goods_add'){
+                window.location.href = "{:url('goods/add')}";
+            }
+        });
+
+        //监听行工具栏
+        table.on('tool(table_list)', function(obj){
+            var layEvent = obj.event;
+            var data = obj.data;
+            if(layEvent === 'show'){
+                window.location.href = "{:url('warehousing/show')}"+"?id="+data.id;
+            }else if(layEvent === 'del'){
+                layer.confirm("您确定要删除吗？", function () {
+                    $.get("{:url('warehousing/del')}" + "?id=" + data.id, function (res) {
+                        if (res.code == 0) {
+                            layer.msg('删除成功')
+                            window.location.reload()
+                        } else {
+                            layer.msg(res.msg)
+                            window.location.reload()
+                        }
+                    });
+                })
+            }
+        });
+    });
+</script>
+</body>
+</html>

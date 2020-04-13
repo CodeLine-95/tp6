@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>入库添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <script src="/static/layui/layui.js"></script>
+    <style>
+        .layui-btn:hover {
+            opacity: .8;
+            filter: alpha(opacity=80);
+            color: #fff;
+        }
+
+        .btn-add-radius {
+            border-radius: 100px;
+        }
+        .btn-add {
+            background-color: rgba(4, 156, 196, 1);
+        }
+        .goods_pic{
+            margin-top: 10px;
+            height: 80px;
+            width: 80px;
+            display: none;
+        }
+        .goods_pic img{
+            width: 100%;
+            height: 100%;
+        }
+        .layui-form-radio > i:hover, .layui-form-radioed > i {
+            color:rgba(4, 156, 196, 1);
+        }
+        .layui-form-select dl dd.layui-this {
+            background-color: rgba(4, 156, 196, 1);
+        }
+    </style>
+</head>
+<body style="background:#f6f6f6;">
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">
+           <span class="layui-breadcrumb" lay-separator="/" style="visibility: visible;">
+              <a href="{:url('index/index')}">控制台</a>
+              <a><cite>商品管理</cite></a>
+              <a href="{:url('goods/index')}">入库管理</a>
+              <a><cite>入库添加</cite></a>
+            </span>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label for="goods_id" class="layui-form-label">商品类型</label>
+                    <div class="layui-input-inline">
+                        <select class="layui-select" name="goods_id" id="goods_id">
+                            {foreach $goods as $g}
+                            <option value="{$g.id}">{$g.goods_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="uid" value="{$uid}">
+                <input type="hidden" name="state" value="{$params['state']}">
+                <div class="layui-form-item">
+                    <label for="num" class="layui-form-label">{if condition="$params['state'] == 1"}入库{else}出库{/if}数量</label>
+                    <div class="layui-input-block">
+                        <input type="number" class="layui-input" value="0" name="num" id="num" lay-verify="goods_stock" placeholder="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="user_tel" class="layui-form-label">联系电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" name="user_tel" id="user_tel" lay-verify="user_tel" placeholder="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="user_email" class="layui-form-label">联系邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" name="user_email" id="user_email" lay-verify="user_email" placeholder="">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn btn-add btn-add-radius" lay-submit lay-filter="save">保存</button>
+                        <button class="layui-btn btn-add btn-add-radius" onclick="window.location.href='{:url("warehousing/index")}'" style="background-color:#ffffff;color: #333;border: 1px solid #ccc;">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['element','upload','form'], function() {
+        var element = layui.element,
+            $ = layui.jquery,
+            upload = layui.upload,
+            form = layui.form;
+
+        /**
+         * 表单提交组件
+         */
+        form.on('submit(save)',function (data) {
+            $.post("{:url('warehousing/add')}",data.field,function (res) {
+                if (res.code === 0){
+                    layer.msg(res.msg);
+                    if (data.field.state == 1) {
+                        window.location.href = "{:url('warehousing/index')}";
+                    }else{
+                        window.location.href = "{:url('warehousing/outputIndex')}";
+                    }
+                }else{
+                    layer.msg(res.msg)
+                }
+            },'json');
+        });
+    });
+</script>
+</body>
+</html>
